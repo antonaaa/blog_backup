@@ -4,6 +4,7 @@ date: 2016-08-07 08:51:49
 tags: 
 - github
 - hexo
+categories: 博客
 ---
 
 > hexo是一个基于node.js的静态博客程序，你可以使用markdown语言来编写你的博客，可以使用hexo提供的命令将其转换成生成静态网页，具体转化为何种样式的静态界面，取决于你所选的主题。
@@ -143,3 +144,5 @@ sudo npm install hexo-deployer-git --save
 
 
 其实部署的只是由hexo生成的静态页面，我们书写的markdown还是在本地存储的，所以不要以为你部署到github上你就不用备份本地的博客了。
+
+还需要对博客文件进行备份，具体如何备份见 [备份 hexo 博客](/2016/08/07/backup-hexo)

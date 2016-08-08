@@ -2,6 +2,7 @@
 title: 地址解析协议ARP
 date: 2016-08-07 10:40:38
 tags: 
+- 数据链路层
 - ARP
 categories: 
 - 计算机网络
@@ -15,7 +16,7 @@ categories:
 3. 为RARP模块发送RARP请求和接收RARP应答。
 
 <!-- more -->
-![Alt 数据链路层首部](http://obil5saf9.bkt.clouddn.com/arp1.png)
+![Alt 数据链路层首部](arp1.png)
 
 上图是以太网的帧格式。
 
@@ -44,7 +45,7 @@ categories:
 ## ARP协议的报文格式与工作原理
 ARP协议是属于数据链路层的协议，所以说它是一个局域网协议，也就是说它只能在局域网内部运行。
 
-![Alt 数据链路层首部](http://obil5saf9.bkt.clouddn.com/arp2.png)
+![Alt 数据链路层首部](arp2.png)
 
 
 硬件类型：硬件地址的类型，如果是以太网，则该字段为1。
@@ -70,11 +71,11 @@ ARP协议是属于数据链路层的协议，所以说它是一个局域网协�
 
 我用wireshark抓了个ARP包，这样就能从实际上+原理上分析出ARP是如何工作的。
 
-![Alt 数据链路层首部](http://obil5saf9.bkt.clouddn.com/arp3.png)
+![Alt 数据链路层首部](arp3.png)
 
 本机的IP地址是197.168.1.100，MAC地址是e0:ac:cb:81:37:9e，因为e0:ac:cb表示该网卡是苹果生产的，所以简写成Apple\_81:37:9e，我想知道IP地址为197.168.1.101的MAC地址，所以发送了一个ARP广播。
 
-![Alt 数据链路层首部](http://obil5saf9.bkt.clouddn.com/arp4.png)
+![Alt 数据链路层首部](arp4.png)
 
 上图是该帧的详细信息，我的电脑封装好该帧之后就发送给交换机了，交换机收到该帧之后，发现目的地址是广播地址，所以向所有的端口转发该帧，当然了，不会向我转发该帧的。
 
@@ -84,7 +85,7 @@ ARP协议是属于数据链路层的协议，所以说它是一个局域网协�
 目的主机发送了一个应答帧给我，我的电脑收到该ARP应答帧之后就会提取出其中的Sender Mac address 和Sender IP address，并将两者的对应关系写入本机的ARP缓存中，当然了该缓存中的每条记录都有一个过期时间的，一般为20分钟。
 
 
-![Alt 数据链路层首部](http://obil5saf9.bkt.clouddn.com/arp5.png)
+![Alt 数据链路层首部](arp5.png)
 
 
 ## 什么时候会使用arp请求协议

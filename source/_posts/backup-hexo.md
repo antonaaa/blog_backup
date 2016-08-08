@@ -2,7 +2,7 @@
 title: 备份 hexo 博客
 date: 2016-08-07 15:51:24
 tags: hexo
-categories:
+categories: 博客
 ---
 
 将`hexo`部署到`github`上时，部署的只是生成的静态页面，我们所书写的`markdown`，还有主题等还是存储在本地的，所以一旦本地的东西没有了，那么博客基本上就GG了，所以还需要在`github`开辟一个新的仓库来备份这些东西。
