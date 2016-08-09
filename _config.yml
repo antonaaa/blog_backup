@@ -12,7 +12,8 @@ timezone:
 since: 2016  # 添加 since 项
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+# url: http://yoursite.com
+url: https://gzmviavia.github.io
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:

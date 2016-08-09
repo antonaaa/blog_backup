@@ -1,6 +1,6 @@
 ---
 title: hexo + github 搭建博客
-date: 2016-08-07 08:51:49
+date: 2016-07-07 08:51:49
 tags: 
 - github
 - hexo

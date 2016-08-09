@@ -10,7 +10,7 @@ $header-height: 60px !default;
 
 // Padding of the header.
 // @type List
-$header-padding: 20px 100px !default;
+$header-padding: 20px 50px !default;
 
 // Font size of the logo.
 // @type Number
@@ -48,6 +48,7 @@ $navbar-active-border: 2px solid $global-theme-color !default;
   header {
     height: $header-height;
     padding: $header-padding;
+	padding-left: 0px;
 
     .logo {
       float: left;
