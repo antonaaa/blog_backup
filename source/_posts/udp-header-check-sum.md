@@ -50,6 +50,14 @@ udp_sock.sendto('dat', addr) #特意发送奇数个字节的数据
 #include <stdio.h>
 
 int check_sum(unsigned short *arr, int n){
+	/**
+	 * 必须使用unsigned short来存储
+	 * 比如说0xbacc，因为加法的时候会进行类型提升
+	 * 如果是unsigned short存储，0xbacc表示正数，那么被提升为0x0000bacc
+	 * 如果是short存储，0xbacc表示负数，那么被提升为0xffffbacc，为什么前面要加f呢？
+	 * 因为负数使用补码，类型提升时，假设前面都补0，那么相当于前面没有被取反过，所以需要取反
+	 * 所以就变成了0xffffbacc
+	 */
 	int sum = 0;
 	for(int i=0; i<n; ++i){
 		arr[i] = ~arr[i];
@@ -63,7 +71,7 @@ int main()
 	unsigned short arr[100];
 	arr[0] = 0xc8d5; //源端口
 	arr[1] = 0x0050; //目的端口
-	arr[2] = 0x000b; //udp长度，8个字节的首部 + 3个字节的数据
+	arr[2] = 0x000b; //udp长度，8个字节的首部 + 4个字节的数据
 	arr[3] = 0x0000; //checksum
 	arr[4] = 0x6461; //数据部分
 	arr[5] = 0x7400; //在最后增加填充字节0
@@ -80,7 +88,7 @@ int main()
 	return 0;
 }
 
-
+ 
 ```
 
 运行该代码后，果然发现检验和是`0x58d4`

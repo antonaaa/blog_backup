@@ -29,6 +29,8 @@ google_analytics: UA-74273646-1
 ## Disqus
 disqus_shortname: ahonn
 
+
+mathjax: true
 # Social links
 social:
   email: mailto:gzmviavia@gmail.com
