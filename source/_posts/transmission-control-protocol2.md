@@ -83,8 +83,48 @@ TCP会对每个发送的分组启动一个**超时计时器**，如果在超时�
 
 > **零窗口探测报文**携带一个字节的数据，不可以不携带数据，因为在TCP连接过程中发送的报文的ACK字段必须被置为1，如果报文不携带数据，那么该报文就是确认报文，对方是不会对确认报文发出确认的。
 
+### Nagle算法
 
+应用进程将数据传送到TCP的发送缓存(就是滑动窗口，所以滑动窗口多大，缓存就多大）后，剩下的任务就由TCP来控制了。可以用不同的机制来控制TCP报文段的发送时机。例如：
+1. TCP维护一个变量，它等于**最大报文段MSS**，只要缓存中存放的数据达到MSS字节时，就组成一个TCP报文段发送出去。
+2. 应用程序指明了要发送报文段，即使用TCP的**推送（push）**操作。
+3. 第三种机制就是发送方维护一个计时器，当计时器到期了就将缓存中的数据发送出去。
+
+在TCP的实现中广泛使用**Nagle**算法，该算法的实现如下：
++ 若应用程序将要发送的数据逐个字节的送到TCP的发送缓存中，则发送方先把第一个数据字节先发送出去，把后面到达的数据字节缓存起来，当发送方收到第一个报文段的确认时，再将发送缓存中的所有数据组装成一个报文然后发送出去。同时对随后到达的数据进行缓存，只有在收到前一个报文段的确认后才继续发送下一个报文段。
++ 如果发送缓存中的数据已经达到报文段的最大长度时，就立即发送一个报文段。
+
+具体的伪代码如下：
+```python
+if there is new data to send: #如果有新数据要发送
+  if the window size >= MSS and available data is >= MSS: #数据的长度达到最大报文段
+    send complete MSS segment now #发送数据
+  else:
+    if there is unconfirmed data still in the pipe: #如果仍旧有报文段没有收到确认
+	#那么就将数据放入buffer中，直到收到一个新的确认才发送
+      enqueue data in the buffer until an acknowledge is received 
+    else:
+      send data immediately #立即发送数据
+```
+
+使用Nagle算法虽然提高了整个网络的吞吐量，但是降低了数据传输的实时性，这对具有很强实时性的应用来说是很不好的。Nagle算法是默认开启的，不过还好，可以通过设置**TCP_NODELAY**选项来禁用Nagle算法。
+
+### 延迟确认算法
+
+TCP收到一个报文之后不会立即发送确认，而是会在以下两种情况发送时发送确认：
+1. 如果接收方此时要发送数据，那么将数据和确认报文合成一个报文发送。
+2. 延迟确认算法的延迟计时器过期，那么立即发送对该报文的确认报文。
+
+延迟确认算法的延迟一般初始化为最小值为**40ms**，但是会经过一定的算法进行调整，另外可以通过设置**TCP_QUICKACK**选项来取消延迟确认。
+
+
+### Nagle算法与延迟确认算法所引起的后果
+如果Nagle算法和延迟确认算法同时开启，可能会使时延增大。Nagle算法要求收到前一个分组的ACK之前，不能发送其它小的数据包。所以尽管发送端的数据已经准备好了，但是由于接收方因为延迟确认算法没有发送对上一个分组的确认，导致数据迟迟不能发送。
 <br />
 参考：
 + [ARQ与滑动窗口协议](http://blog.csdn.net/jmq_0000/article/details/7299910)
 + [TCP协议中的计时器](http://www.tuicool.com/articles/bQfmUv)
++ [Nagle's algorithm](https://en.wikipedia.org/wiki/Nagle%27s_algorithm)
++ [ TCP/IP延迟确认和Nagle算法](http://blog.csdn.net/m_vptr/article/details/7093553)
++ [Nagle算法](http://blog.csdn.net/cylan_jia/article/details/7976051)
++ [再次谈谈TCP的Nagle算法与TCP\_CORK选项](http://blog.csdn.net/dog250/article/details/21303679)
