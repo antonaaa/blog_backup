@@ -2,6 +2,7 @@
 title: 传输控制协议（4）保活定时器
 date: 2016-08-13 14:27:53
 tags:
+- 计算机网络
 - 运输层
 - TCP
 categories:
@@ -32,6 +33,22 @@ TCP/IP协议允许一个TCP连接没有数据传输，也就是说我们可以�
 
 ## 如何使用保活计时器
 
+在Linux系统中，有三个跟TCP keepalive相关的参数：
+
+```cpp
+tcp_keepalive_intvl (integer; default: 75; since Linux 2.4)
+       The number of seconds between TCP keep-alive probes.
+
+tcp_keepalive_probes (integer; default: 9; since Linux 2.2)
+       The  maximum  number  of  TCP  keep-alive  probes  to send before giving up and killing the connection if no
+       response is obtained from the other end.
+
+tcp_keepalive_time (integer; default: 7200; since Linux 2.2)
+       The number of seconds a connection needs to be idle before TCP begins sending out keep-alive probes.   Keep-
+       alives  are  sent only when the SO_KEEPALIVE socket option is enabled.  The default value is 7200 seconds (2
+       hours).  An idle connection is terminated after approximately an additional 11 minutes (9 probes an interval
+       of 75 seconds apart) when keep-alive is enabled.
+```
 
 <br/>
 <br/>
